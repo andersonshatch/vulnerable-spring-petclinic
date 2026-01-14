@@ -3,11 +3,12 @@ services:
     image: mysql:8.0
     # mapping this port just incase people want to only run the DB as a docker
     # container and run the petclinic app manually.
-    ports:
-      - "3306:3306"
+    #ports:
+    #  - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_ROOT_HOST="0.0.0.0"
 
     # Disabling docker profile because for a demo we are only ever using the mysql db.
 #    profiles:

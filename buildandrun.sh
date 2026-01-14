@@ -3,7 +3,7 @@
 
 # Check if Java & mvn are installed
 command -v "java" >/dev/null 2>&1 || { echo "Error: java is not installed."; exit 1; }
-command -v "mvn" >/dev/null 2>&1 || { echo "Error: mvn is not installed."; exit 1; }
+command -v "./mvnw" >/dev/null 2>&1 || { echo "Error: mvn is not installed."; exit 1; }
 
 
 
@@ -33,15 +33,15 @@ rm webapp.log||true
 
 # Build and run JARs
 echo "Building Email Service."
-cd EmailService && mvn clean package -DskipTests=true || { echo "Error: Maven build failed."; exit 1; }
+cd EmailService && ./mvnw clean package -DskipTests=true || { echo "Error: Maven build failed."; exit 1; }
 cd ..
 
 echo "Building WebApplication Service."
-cd WebApplication && mvn clean package -DskipTests=true || { echo "Error: Maven build failed."; exit 1; }
+cd WebApplication && ./mvnw clean package -DskipTests=true || { echo "Error: Maven build failed."; exit 1; }
 cd ..
 
 echo "Running Email Service"
-nohup /opt/java/openjdk/bin/java -javaagent:"$AGENT_FILE" -Dcom.sun.jndi.ldap.object.trustURLCodebase=true -Dspring.profiles.active=mysql -jar EmailService/target/EmailService-1.0.0-SNAPSHOT.jar &> "$WORKDIR/emailservice.log" &
+nohup java -javaagent:"$AGENT_FILE" -Dcom.sun.jndi.ldap.object.trustURLCodebase=true -Dspring.profiles.active=mysql -jar EmailService/target/EmailService-1.0.0-SNAPSHOT.jar &> "$WORKDIR/emailservice.log" &
 sleep 60
 echo "Checking if Email Service is running"
 curl http://localhost:8081/actuator/health | grep UP && echo  "Email Service up and responding" || { echo "Error: Email Service is not running."; exit 1; }

@@ -41,11 +41,6 @@ public class CustomerController {
 		this.dataSource = dataSource;
 	}
 
-	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields("id");
-	}
-
 	@ModelAttribute("customer")
 	public Customer findCustomer(@PathVariable(name = "customerId", required = false) Integer customerId) {
 		return customerId == null ? new Customer() : this.customers.findById(customerId);
